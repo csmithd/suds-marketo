@@ -1,0 +1,2 @@
+include AUTHORS CHANGES README.md INSTALL LICENSE
+recursive-include suds-marketo *.py
