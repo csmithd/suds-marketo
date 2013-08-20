@@ -10,7 +10,7 @@ def sign(message, encryption_key):
 
 def header(user_id, encryption_key):
     authentication_header = Element("AuthenticationHeader")
-    timestamp = datetime.utcnow()
+    timestamp = datetime.utcnow().isoformat()
     signature = sign(timestamp + user_id, encryption_key)
 
     user_id_element = Element("mktowsUserId")
