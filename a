@@ -1,0 +1,17 @@
+<SOAP-ENV:Envelope xmlns:ns0="http://www.marketo.com/mktows/" xmlns:ns1="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <ns1:AuthenticationHeader>
+         <mktowsUserId>punchtabdev1_7963522151F1C34A4917B0</mktowsUserId>
+         <requestSignature>9964258993433e4e74f4f3b506ffff265c8af848</requestSignature>
+         <requestTimestamp>2013-08-21T00:48:38Z</requestTimestamp>
+      </ns1:AuthenticationHeader>
+   </SOAP-ENV:Header>
+   <ns1:Body>
+      <ns0:paramsGetLead>
+         <leadKey>
+            <keyType>EMAIL</keyType>
+            <keyValue>arthur@punchtab.com</keyValue>
+         </leadKey>
+      </ns0:paramsGetLead>
+   </ns1:Body>
+</SOAP-ENV:Envelope>

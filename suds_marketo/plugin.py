@@ -1,0 +1,1 @@
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://www.marketo.com/mktows/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ins0="http://www.marketo.com/mktows/" xmlns:ns1="http://www.marketo.com/mktows/" xmlns:mkt="http://www.marketo.com/mktows/

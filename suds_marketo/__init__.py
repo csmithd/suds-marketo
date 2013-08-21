@@ -20,20 +20,21 @@ class Client:
         self.user_id = user_id
         self.encryption_key = encryption_key
 
-        self.client = SudsClient('http://app.marketo.com/soap/mktows/2_0?WSDL')
+        self.suds_client = SudsClient('http://app.marketo.com/soap/mktows/2_0?WSDL',
+                location=self.soap_endpoint)
         # Make easy the access to the types
         self.valid_types = []
-        for valid_type in self.client.sd[0].types:
+        for valid_type in self.suds_client.sd[0].types:
             self.valid_types.append(valid_type[0].name)
 
     def __getattribute__(self, name):
         if name != 'valid_types' and name in self.valid_types:
             # if the attribute is one of the Types
-            return self.client.factory.create(name)
+            return self.suds_client.factory.create(name)
         else:
             return super(Client, self).__getattribute__(name)
 
     def set_header(self):
         soapheaders = auth.header(self.user_id, self.encryption_key)
-        self.client.set_options(soapheaders=soapheaders)
+        self.suds_client.set_options(soapheaders=soapheaders)
 
