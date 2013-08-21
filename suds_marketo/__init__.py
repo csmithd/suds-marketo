@@ -61,6 +61,17 @@ class Client(object):
         else:
             return super(Client, self).__getattribute__(name)
 
+    def build_lead_record(self, email, attributes):
+        lead_record = self.LeadRecord
+        lead_record.Email = email
+        lead_attributes_list = self.ArrayOfAttribute
+        for attr in attributes:
+            attribute = self.Attribute
+            attribute.attrName, attribute.attrType, attribute.attrValue = attr
+            lead_attributes_list.attribute.append(attribute)
+        lead_record.leadAttributeList = lead_attributes_list
+        return lead_record
+
     def set_header(self):
         """
         Set the header of the SOAP request with the required parameters.
@@ -99,14 +110,16 @@ class Client(object):
         :param return_lead: If set to true, complete lead record will be returned. Default: False
         :return ResultSyncLead
         """
-        lead_record = self.LeadRecord
-        lead_record.Email = email
-        lead_attributes_list = self.ArrayOfAttribute
-        for attr in attributes:
-            attribute = self.Attribute
-            attribute.attrName, attribute.attrType, attribute.attrValue = attr
-            lead_attributes_list.attribute.append(attribute)
-
-        lead_record.leadAttributeList = lead_attributes_list
+        lead_record = self.build_lead_record(email, attributes)
         return self.call_service('syncLead', lead_record, return_lead)
 
+    def sync_multiple_leads(self, lead_list, dedup_enabled=True):
+        """
+        :param lead_record_list: List of tuples (email_address, attributes)
+        :param dedup_enabled: If set to true, de-duplicate lead record on email address. Default: True
+        :return ResultSyncMultipleLeads
+        """
+        lead_record_list = []
+        for lead in lead_list:
+            lead_record_list.append(self.build_lead_record(lead[0], lead[1]))
+        return self.call_service('syncMultipleLeads', lead_record_list, dedup_enabled)
