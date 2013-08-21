@@ -34,6 +34,6 @@ class Client:
             return super(Client, self).__getattribute__(name)
 
     def set_header(self):
-        wsse = auth.header(self.user_id, self.encryption_key)
-        self.client.set_options(wsse=wsse)
+        soapheaders = auth.header(self.user_id, self.encryption_key)
+        self.client.set_options(soapheaders=soapheaders)
 
