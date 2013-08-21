@@ -24,9 +24,41 @@ You can see the list of functions and objects available by printing the suds cli
 
 ```python
 > print client.suds_types
-[ActivityRecord, ActivityType, ActivityTypeFilter, ArrayOfActivityRecord, ArrayOfActivityType, ArrayOfAttrib, ..., SuccessSyncMultipleLeads, SyncCustomObjStatus, SyncOperationEnum, SyncStatus, SyncStatusEnum, VersionedItem]
+[ActivityRecord, ActivityType, ActivityTypeFilter, ArrayOfActivityRecord, ArrayOfActivityType,
+ArrayOfAttrib, ArrayOfAttribute, ArrayOfBase64Binary, ArrayOfCampaignRecord, ArrayOfCustomObj,
+ArrayOfInteger, ArrayOfKeyList, ArrayOfLeadChangeRecord, ArrayOfLeadKey, ArrayOfLeadRecord,
+ArrayOfLeadStatus, ArrayOfMObjAssociation, ArrayOfMObjCriteria, ArrayOfMObjFieldMetadata,
+ArrayOfMObjStatus, ArrayOfMObject, ArrayOfString, ArrayOfSyncCustomObjStatus, ArrayOfSyncStatus,
+ArrayOfVersionedItem, Attrib, Attribute, AuthenticationHeaderInfo, CampaignRecord,
+ComparisonEnum, CustomObj, ForeignSysType, ImportToListModeEnum, ImportToListStatusEnum,
+LastUpdateAtSelector, LeadActivityList, LeadChangeRecord, LeadKey, LeadKeyRef, LeadKeySelector,
+LeadMergeStatusEnum, LeadRecord, LeadSelector, LeadStatus, LeadSyncStatus, ListKey,
+ListKeyType, ListOperationType, MObjAssociation, MObjCriteria, MObjFieldMetadata, MObjStatus,
+MObjStatusEnum, MObject, MObjectMetadata, MObjectTypeEnum, MergeStatus,
+MktowsContextHeaderInfo, ParamsDeleteCustomObjects, ParamsDeleteMObjects,
+ParamsDescribeMObject, ParamsGetCampaignsForSource, ParamsGetCustomObjects,
+ParamsGetImportToListStatus, ParamsGetLead, ParamsGetLeadActivity, ParamsGetLeadChanges,
+ParamsGetMObjects, ParamsGetMultipleLeads, ParamsImportToList, ParamsListMObjects,
+ParamsListOperation, ParamsMergeLeads, ParamsRequestCampaign, ParamsScheduleCampaign,
+ParamsSyncCustomObjects, ParamsSyncLead, ParamsSyncMObjects, ParamsSyncMultipleLeads,
+ReqCampSourceType, ResultDeleteCustomObjects, ResultDeleteMObjects, ResultDescribeMObject,
+ResultGetCampaignsForSource, ResultGetCustomObjects, ResultGetImportToListStatus, ResultGetLead,
+ResultGetLeadChanges, ResultGetMObjects, ResultGetMultipleLeads, ResultImportToList,
+ResultListMObjects, ResultListOperation, ResultMergeLeads, ResultRequestCampaign,
+ResultScheduleCampaign, ResultSyncCustomObjects, ResultSyncLead, ResultSyncMObjects,
+ResultSyncMultipleLeads, StaticListSelector, StreamPosition, SuccessDeleteCustomObjects,
+SuccessDeleteMObjects, SuccessDescribeMObject, SuccessGetCampaignsForSource,
+SuccessGetCustomObjects, SuccessGetImportToListStatus, SuccessGetLead, SuccessGetLeadActivity,
+SuccessGetLeadChanges, SuccessGetMObjects, SuccessGetMultipleLeads, SuccessImportToList,
+SuccessListMObjects, SuccessListOperation, SuccessMergeLeads, SuccessRequestCampaign,
+SuccessScheduleCampaign, SuccessSyncCustomObjects, SuccessSyncLead, SuccessSyncMObjects,
+SuccessSyncMultipleLeads, SyncCustomObjStatus, SyncOperationEnum, SyncStatus, SyncStatusEnum,
+VersionedItem]
 > print client.suds_methods
-[getCampaignsForSource, deleteCustomObjects, syncMultipleLeads, deleteMObjects, describeMObject, listOperation, mergeLeads, getCustomObjects, getLead, getImportToListStatus, importToList, syncLead, getMObjects, getLeadActivity, getLeadChanges, syncMObjects, scheduleCampaign, listMObjects, syncCustomObjects, requestCampaign, getMultipleLeads]
+[getCampaignsForSource, deleteCustomObjects, syncMultipleLeads, deleteMObjects, describeMObject,
+listOperation, mergeLeads, getCustomObjects, getLead, getImportToListStatus, importToList,
+syncLead, getMObjects, getLeadActivity, getLeadChanges, syncMObjects, scheduleCampaign,
+listMObjects, syncCustomObjects, requestCampaign, getMultipleLeads]
 
 ```
 
@@ -49,11 +81,13 @@ If the function is defined in the client class:
 
 If the function you are looking for is not defined in the client class:
 
+```python
 > lead_key = client.LeadKey # You need to create the proper object to pass to the function
 > lead_key.keyType = client.LeadKeyRef.EMAIL
 > lead_key.keyValue = email
 > client.set_header() # You need to sign the header every time you make a call to the SOAP Api
 > resp = client.getLead(lead_key)
+```
 
 ### Error
 
