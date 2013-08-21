@@ -84,29 +84,55 @@ If the function you are looking for is not defined in the client class:
 ```python
 > lead_key = client.LeadKey # You need to create the proper object to pass to the function
 > lead_key.keyType = client.LeadKeyRef.EMAIL
-> lead_key.keyValue = email
+> lead_key.keyValue = 'test@punchtab.com'
 > client.set_header() # You need to sign the header every time you make a call to the SOAP Api
 > resp = client.getLead(lead_key)
 ```
 
 ### Error
 
-An Exception is raised if the lead is not found, or if a Marketo error occurs.
+An Exception is raised if a Marketo error occurs (caused either by client or server).
 
 ```python
-from suds import WebFault
-try:
-    lead = client.get_lead('test@punchtab.com')
-except WebFault as e:
-    print e
-```
+> from suds import WebFault
+> try:
+>    lead = client.get_lead('test@punchtab.com')
+> except WebFault as e:
+>    print e
+
+Server raised fault: '20103 - Lead not found'
+``
 As described in the Appendix B of the Marketo API, you can access the following error attributes:
 ```
-e.fault.faultcode
-e.fault.faultstring
-e.fault.detail
-e.fault.detail.serviceException
-e.fault.detail.serviceException.name
-e.fault.detail.serviceException.message
-e.fault.detail.serviceException.code
+> print e.fault.faultcode
+SOAP-ENV:Client
+
+> print e.fault.faultstring
+20103 - Lead not found
+
+> print e.fault.detail
+(detail){
+   serviceException = 
+      (serviceException){
+         name = "mktServiceException"
+         message = "No lead found with EMAIL = test@punchtab.com (20103)"
+         code = "20103"
+      }
+ }
+
+> print e.fault.detail.serviceException
+(serviceException){
+   name = "mktServiceException"
+   message = "No lead found with EMAIL = test@punchtab.com (20103)"
+   code = "20103"
+ }
+
+> print e.fault.detail.serviceException.name
+mktServiceException
+
+> print e.fault.detail.serviceException.message
+No lead found with EMAIL = test@punchtab.com (20103)
+
+> print e.fault.detail.serviceException.code
+20103
 ```
