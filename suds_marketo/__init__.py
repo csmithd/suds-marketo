@@ -82,6 +82,7 @@ class Client(object):
     def get_lead(self, email):
         """
         :param email: email address of the lead to retry
+        :return ResultGetLead
         raise suds.WebFault with code 20103 if not found.
         """
         lead_key = self.LeadKey
@@ -89,22 +90,23 @@ class Client(object):
         lead_key.keyValue = email
         return self.call_service('getLead', lead_key)
 
-    def sync_lead(self, email, attributes, return_lead=True):
+    def sync_lead(self, email, attributes, return_lead=False):
         """
         :param email: email address of the lead to sync
         :param attributes: list of attributes as tuples
             format: ((Name, Type, Value), )
-            example: (('First', 'string', 'Spong'), ('Last', 'string', 'Bob'))
-        :param return_lead: If set to true, complete lead record will be returned. Default: True
+            example: (('FirstName', 'string', 'Spong'), ('LastName', 'string', 'Bob'))
+        :param return_lead: If set to true, complete lead record will be returned. Default: False
+        :return ResultSyncLead
         """
         lead_record = self.LeadRecord
-        lead_record.email = email
-        lead_attributes = self.ArrayOfAttribute
+        lead_record.Email = email
+        lead_attributes_list = self.ArrayOfAttribute
         for attr in attributes:
             attribute = self.Attribute
             attribute.attrName, attribute.attrType, attribute.attrValue = attr
-            lead_attributes.attribute.append(attribute)
+            lead_attributes_list.attribute.append(attribute)
 
-        lead_record.attributes = attributes
+        lead_record.leadAttributeList = lead_attributes_list
         return self.call_service('syncLead', lead_record, return_lead)
 
