@@ -9,7 +9,7 @@ def sign(message, encryption_key):
     return digest.hexdigest().lower()
 
 def header(user_id, encryption_key):
-    authentication_header = Element("AuthenticationHeader")
+    authentication_header = Element("AuthenticationHeader").addPrefix(p='ns1')
     timestamp = datetime.utcnow().isoformat()
     signature = sign(timestamp + user_id, encryption_key)
 
