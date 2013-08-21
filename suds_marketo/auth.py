@@ -2,6 +2,7 @@ import hmac
 import hashlib
 
 from datetime import datetime
+from rfc3339 import rfc3339
 from suds.sax.element import Element
 
 def sign(message, encryption_key):
@@ -10,7 +11,7 @@ def sign(message, encryption_key):
 
 def header(user_id, encryption_key):
     authentication_header = Element("ns1:AuthenticationHeader")
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = rfc3339(datetime.utcnow(), utc=True)
     signature = sign(timestamp + user_id, encryption_key)
 
     user_id_element = Element("mktowsUserId")
