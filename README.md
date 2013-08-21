@@ -101,7 +101,8 @@ An Exception is raised if a Marketo error occurs (caused either by client or ser
 >    print e
 
 Server raised fault: '20103 - Lead not found'
-``
+```
+
 As described in the Appendix B of the Marketo API, you can access the following error attributes:
 ```
 > print e.fault.faultcode
