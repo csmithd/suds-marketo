@@ -85,8 +85,7 @@ If the function you are looking for is not defined in the client class:
 > lead_key = client.LeadKey # You need to create the proper object to pass to the function
 > lead_key.keyType = client.LeadKeyRef.EMAIL
 > lead_key.keyValue = 'test@punchtab.com'
-> client.set_header() # You need to sign the header every time you make a call to the SOAP Api
-> resp = client.getLead(lead_key)
+> resp = client.call_service('getLead', lead_key)
 ```
 
 ### Error
