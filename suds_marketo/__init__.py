@@ -119,7 +119,7 @@ class Client(object):
         :param dedup_enabled: If set to true, de-duplicate lead record on email address. Default: True
         :return ResultSyncMultipleLeads
         """
-        lead_record_list = []
+        lead_record_list = self.ArrayOfLeadRecord
         for lead in lead_list:
-            lead_record_list.append(self.build_lead_record(lead[0], lead[1]))
+            lead_record_list.leadRecord.append(self.build_lead_record(lead[0], lead[1]))
         return self.call_service('syncMultipleLeads', lead_record_list, dedup_enabled)
