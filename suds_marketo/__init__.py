@@ -16,9 +16,9 @@ class Client(object):
     MARKETO_WSDL = 'http://app.marketo.com/soap/mktows/2_0?WSDL'
     """Url of the Marketo wsdl file"""
 
-    valid_types = []
+    suds_types = []
     """List of the Marketo SOAP Api types"""
-    valid_methods = []
+    suds_methods = []
     """List of the Marketo SOAP Api methods"""
     soap_endpoint = None
     """Marketo SOAP endpoint"""
