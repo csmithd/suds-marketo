@@ -1,9 +1,17 @@
+from datetime import datetime
+from rfc3339 import rfc3339
 from suds.client import Client as SudsClient
 import version
-import auth
 
 __author__ = version.AUTHOR
 __version__ = version.VERSION
+
+import hmac
+import hashlib
+
+def sign(message, encryption_key):
+    digest = hmac.new(encryption_key, message, hashlib.sha1)
+    return digest.hexdigest().lower()
 
 class Client(object):
 
@@ -61,6 +69,19 @@ class Client(object):
         else:
             return super(Client, self).__getattribute__(name)
 
+    def set_header(self):
+        """
+        Set the header of the SOAP request with the required parameters.
+        See page 6 of the Marketo SOAP Api doc.
+        """
+        authentication_header = self.AuthenticationHeaderInfo
+        timestamp = rfc3339(datetime.utcnow(), utc=True)
+        authentication_header.requestSignature = sign(timestamp + self.user_id, self.encryption_key)
+        authentication_header.mktowsUserId = self.user_id
+        authentication_header.requestTimestamp = timestamp
+
+        self.suds_client.set_options(soapheaders=authentication_header)
+
     def build_lead_record(self, email, attributes):
         lead_record = self.LeadRecord
         lead_record.Email = email
@@ -71,15 +92,6 @@ class Client(object):
             lead_attributes_list.attribute.append(attribute)
         lead_record.leadAttributeList = lead_attributes_list
         return lead_record
-
-    def set_header(self):
-        """
-        Set the header of the SOAP request with the required parameters.
-        See page 6 of the Marketo SOAP Api doc.
-        """
-        soapheaders = auth.header(self.user_id, self.encryption_key)
-        self.suds_client.set_options(soapheaders=soapheaders)
-
 
     def call_service(self, name, *args, **kwargs):
         """Set the header before calling the soap service
