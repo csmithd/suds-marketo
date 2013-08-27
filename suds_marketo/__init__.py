@@ -75,7 +75,7 @@ class Client(object):
         See page 6 of the Marketo SOAP Api doc.
         """
         authentication_header = self.AuthenticationHeaderInfo
-        timestamp = rfc3339(datetime.utcnow(), utc=True)
+        timestamp = rfc3339(datetime.utcnow(), utc=True, use_system_timezone=False)
         authentication_header.requestSignature = sign(timestamp + self.user_id, self.encryption_key)
         authentication_header.mktowsUserId = self.user_id
         authentication_header.requestTimestamp = timestamp
