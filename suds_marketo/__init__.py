@@ -13,6 +13,8 @@ def sign(message, encryption_key):
     digest = hmac.new(encryption_key, message, hashlib.sha1)
     return digest.hexdigest().lower()
 
+class InvalidLeadKeyType(Exception): pass
+
 class Client(object):
 
     """
@@ -82,9 +84,19 @@ class Client(object):
 
         self.suds_client.set_options(soapheaders=authentication_header)
 
-    def build_lead_record(self, email, attributes):
+    def build_lead_record(self, email=None, attributes=[], marketo_id=None, foreign_person_id=None):
         lead_record = self.LeadRecord
-        lead_record.Email = email
+        if marketo_id:
+            lead_record.Id = marketo_id
+        if foreign_person_id:
+            lead_record.ForeignSysPersonId = foreign_person_id
+            lead_record.ForeignSysType = 'CUSTOM'
+        if email:
+            lead_record.Email = email
+
+        if not marketo_id and not foreign_person_id and not email:
+            raise InvalidLeadKeyType("No unqiue sync key. Neither email nor foreign_person_id were specified")
+
         lead_attributes_list = self.ArrayOfAttribute
         for attr in attributes:
             attribute = self.Attribute
@@ -102,28 +114,35 @@ class Client(object):
         self.set_header()
         return self.__getattribute__(name)(*args, **kwargs)
 
-    def get_lead(self, email):
+    def get_lead(self, email=None, marketo_id=None):
         """
         :param email: email address of the lead to retry
+        :param marketo_id: marketo id of the lead to retry
         :return ResultGetLead
         raise suds.WebFault with code 20103 if not found.
         """
         lead_key = self.LeadKey
-        lead_key.keyType = self.LeadKeyRef.EMAIL
-        lead_key.keyValue = email
+        if marketo_id:
+            lead_key.keyType = self.LeadKeyRef.IDNUM
+            lead_key.keyValue = marketo_id
+        elif email:
+            lead_key.keyType = self.LeadKeyRef.EMAIL
+            lead_key.keyValue = email
+        else:
+            raise InvalidLeadKeyType('No unique lead key to retrieve')
         return self.call_service('getLead', lead_key)
 
-    def sync_lead(self, email, attributes, return_lead=False):
+    def sync_lead(self, email=None, attributes=[], return_lead=False, marketo_id=None, foreign_person_id=None, marketo_cookie=None):
         """
         :param email: email address of the lead to sync
         :param attributes: list of attributes as tuples
             format: ((Name, Type, Value), )
-            example: (('FirstName', 'string', 'Spong'), ('LastName', 'string', 'Bob'))
+            example: (('FirstName', 'string', 'Sponge'), ('LastName', 'string', 'Bob'))
         :param return_lead: If set to true, complete lead record will be returned. Default: False
         :return ResultSyncLead
         """
-        lead_record = self.build_lead_record(email, attributes)
-        return self.call_service('syncLead', lead_record, return_lead)
+        lead_record = self.build_lead_record(email=email, attributes=attributes, marketo_id=marketo_id, foreign_person_id=foreign_person_id)
+        return self.call_service('syncLead', lead_record, marketo_cookie=marketo_cookie, return_lead=return_lead)
 
     def sync_multiple_leads(self, lead_list, dedup_enabled=True):
         """
